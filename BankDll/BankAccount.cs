@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BankDll
 {
-    public class BankAccount: IBankAccount
+    public class BankAccount : IBankAccount
     {
         public enum Type { Current = 1, Saving = 2 };
         protected static float bonus;
@@ -14,7 +14,7 @@ namespace BankDll
         protected Type type;
         protected Currency currency;
         protected string Owner { get; private set; }
-        public Queue<BankTransaction> checks = new Queue<BankTransaction>();
+        private Queue<BankTransaction> checks = new Queue<BankTransaction>();
         protected void SetCurrency(Currency currency)
         {
             this.currency = currency;
@@ -90,7 +90,7 @@ namespace BankDll
                     balance -= money;
                     reflection.balance += currency.Compare(reflection.currency) * money;
                     checks.Enqueue(new BankTransaction(-money, currency));
-                    reflection.checks.Enqueue(new BankTransaction(currency.Compare(reflection.currency) * money, 
+                    reflection.checks.Enqueue(new BankTransaction(currency.Compare(reflection.currency) * money,
                         reflection.currency));
                 }
                 else
@@ -98,6 +98,25 @@ namespace BankDll
                     Console.WriteLine("Недостаточно средств для выполнения перевода");
                 }
             }
+        }
+        public void Dispose()
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter($"Account{ID}report.txt", true, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine();
+                    while (checks.Count != 0)
+                    {
+                        sw.WriteLine(checks.Dequeue());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            GC.SuppressFinalize(this);
         }
         public static bool operator ==(BankAccount first, BankAccount second)
         {
