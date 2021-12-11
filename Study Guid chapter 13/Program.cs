@@ -17,8 +17,8 @@ namespace Study_Guid_chapter_13
             firstAccount.TransferMoney(secondAccount, 300);
             Console.WriteLine(firstAccount);
             Console.WriteLine(secondAccount);
-            Console.WriteLine(firstAccount.checks.Dequeue()[1]);
-            Console.WriteLine(secondAccount.checks.Dequeue()[0]);
+            firstAccount.Dispose();
+            secondAccount.Dispose();
 
             Console.ReadKey();
         }

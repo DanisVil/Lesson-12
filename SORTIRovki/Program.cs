@@ -12,7 +12,7 @@ namespace SORTIRovki
         {
             double[] array = new double[10] { 5, 4, 6, 9, 1, 3, 2, 7, 8, 10 };
             //Console.WriteLine(Array.BinarySearch(array, 0, 8, 7));
-            Sorters.InsertionSort(array);
+            Sorters.HeapSort(array);
             foreach (double number in array)
             {
                 Console.WriteLine(number);

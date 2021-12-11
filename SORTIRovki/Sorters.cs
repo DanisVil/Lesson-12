@@ -103,5 +103,55 @@ namespace SORTIRovki
             mas[ending] = temp;
             return pivot;
         }
+
+        public static void HeapSort(double[] array)
+        {
+            int n = array.Length;
+
+            // Построение кучи (перегруппируем массив)
+            for (int i = n / 2 - 1; i >= 0; i--)
+                Heapify(array, n, i);
+
+            // Один за другим извлекаем элементы из кучи
+            for (int i = n - 1; i >= 0; i--)
+            {
+                // Перемещаем текущий корень в конец
+                double temp = array[0];
+                array[0] = array[i];
+                array[i] = temp;
+
+                // вызываем процедуру heapify на уменьшенной куче
+                Heapify(array, i, 0);
+            }
+        }
+
+        // Процедура для преобразования в двоичную кучу поддерева с корневым узлом i, что является
+        // индексом в arr[]. n - размер кучи
+
+        public static void Heapify(double[] array, int n, int i)
+        {
+            int largest = i;
+            // Инициализируем наибольший элемент как корень
+            int l = 2 * i + 1; // left = 2*i + 1
+            int r = 2 * i + 2; // right = 2*i + 2
+
+            // Если левый дочерний элемент больше корня
+            if (l < n && array[l] > array[largest])
+                largest = l;
+
+            if (r < n && array[r] > array[largest])
+                largest = r;
+
+            // Если самый большой элемент не корень
+            if (largest != i)
+            {
+                double temp = array[i];
+                array[i] = array[largest];
+                array[largest] = temp;
+
+                // Рекурсивно преобразуем в двоичную кучу затронутое поддерево
+                Heapify(array, n, largest);
+            }
+        }
     }
 }
